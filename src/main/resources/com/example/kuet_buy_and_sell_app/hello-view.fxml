@@ -28,16 +28,16 @@
     <VBox alignment="CENTER" maxWidth="900.0" spacing="30.0" style="-fx-padding: 50;">
 
         <!-- App Header -->
-        <Label text="KUET Buy and Sell App" textFill="#16a1e7">
+        <Label text="KUET Buy and Sell App" textFill="#ac7e9d">
             <font>
-                <Font size="29.0" />
+                <Font name="System Bold Italic" size="26.0" />
             </font>
         </Label>
 
         <!-- Main Slogan -->
         <Label style="-fx-text-fill: re;" text="Upcycle Your Products" textFill="#8c3139">
             <font>
-                <Font name="Oswald Bold" size="60.0" />
+                <Font name="System Bold" size="60.0" />
             </font>
         </Label>
 
@@ -56,17 +56,17 @@
 
             <!-- Seller Path Container -->
             <VBox alignment="CENTER" minHeight="200.0" minWidth="400.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.2); -fx-padding: 30;">
-            <ImageView fitHeight="72.0" fitWidth="74.0" opacity="0.65" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="58.0" fitWidth="53.0" opacity="0.65" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../img/sellericon.png" />
+                  <Image url="@../../../../../../../../Downloads/investor.png" />
                </image>
             </ImageView>
-                <Label alignment="CENTER" contentDisplay="TOP" style="-fx-text-fill: white;" text="Want to sell used items? Post your listings here." wrapText="true">
+                <Label alignment="CENTER" contentDisplay="TOP" text="Want to sell used items? Post your listings here." textFill="#245b76" wrapText="true">
                     <font>
                         <Font name="Inter SemiBold" size="20.0" />
                     </font>
                 </Label>
-                <Button minWidth="200.0" mnemonicParsing="false" style="-fx-background-color: #55aeef; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Seller">
+                <Button minWidth="200.0" mnemonicParsing="false" style="-fx-background-color: #55AEEFFF; -fx-text-fill: #FFFFFFFF; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Seller">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>
@@ -75,17 +75,17 @@
 
             <!-- Buyer Path Container -->
             <VBox alignment="CENTER" minHeight="200.0" minWidth="400.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.2); -fx-padding: 30;">
-            <ImageView fitHeight="69.0" fitWidth="100.0" opacity="0.91" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="48.0" fitWidth="78.0" opacity="0.91" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../img/icon2..png" />
+                  <Image url="@../../../../../../../../Downloads/buyer.png" />
                </image>
             </ImageView>
-                <Label alignment="CENTER" contentDisplay="TOP" style="-fx-text-fill: white;" text="Looking to buy used products? Browse our marketplace." wrapText="true">
+                <Label alignment="CENTER" contentDisplay="TOP" text="Looking to buy used products? Browse our marketplace." textFill="#6e1d1d" wrapText="true">
                     <font>
                         <Font name="Inter SemiBold" size="20.0" />
                     </font>
                 </Label>
-                <Button minWidth="200.0" mnemonicParsing="false" style="-fx-background-color: #da6dbc; -fx-text-fill: #0D47A1; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Buyer">
+                <Button minWidth="200.0" mnemonicParsing="false" style="-fx-background-color: #DA6DBCFF; -fx-text-fill: #FFFFFFFF; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Buyer">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>
