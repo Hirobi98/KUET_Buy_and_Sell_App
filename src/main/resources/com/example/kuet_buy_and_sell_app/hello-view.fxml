@@ -1,16 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.kuet_buy_and_sell_app.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <!-- 1. BACKGROUND LAYER (Image Placeholder) -->
+    <ImageView fx:id="backgroundImageView" fitHeight="720.0" fitWidth="1280.0" opacity="0.67" pickOnBounds="true" preserveRatio="false">
+        <image>
+            <Image url="@../../../img/bg2.png" />
+        </image>
+
+
+        <style>
+            -fx-background-color: #0D47A1; /* Dark Blue */
+        </style>
+    </ImageView>
+
+    <!-- 2. CONTENT LAYER (Centered VBox) -->
+    <VBox alignment="CENTER" maxWidth="900.0" spacing="30.0" style="-fx-padding: 50;">
+
+        <!-- App Header -->
+        <Label text="KUET Buy and Sell App" textFill="#16a1e7">
+            <font>
+                <Font size="29.0" />
+            </font>
+        </Label>
+
+        <!-- Main Slogan -->
+        <Label style="-fx-text-fill: re;" text="Upcycle Your Products" textFill="#8c3139">
+            <font>
+                <Font name="Oswald Bold" size="60.0" />
+            </font>
+        </Label>
+
+        <!-- Subtitle -->
+        <Label text="Separate, verified access ensures a secure experience for both roles." textAlignment="CENTER" textFill="#9e3543">
+            <font>
+                <Font size="16.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="30.0" />
+            </VBox.margin>
+        </Label>
+
+        <!-- Dual Path Buttons/Sections -->
+        <HBox alignment="CENTER" spacing="50.0">
+
+            <!-- Seller Path Container -->
+            <VBox alignment="CENTER" minHeight="200.0" minWidth="400.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.2); -fx-padding: 30;">
+            <ImageView fitHeight="72.0" fitWidth="74.0" opacity="0.65" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/sellericon.png" />
+               </image>
+            </ImageView>
+                <Label alignment="CENTER" contentDisplay="TOP" style="-fx-text-fill: white;" text="Want to sell used items? Post your listings here." wrapText="true">
+                    <font>
+                        <Font name="Inter SemiBold" size="20.0" />
+                    </font>
+                </Label>
+                <Button minWidth="200.0" mnemonicParsing="false" style="-fx-background-color: #55aeef; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Seller">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Button>
+            </VBox>
+
+            <!-- Buyer Path Container -->
+            <VBox alignment="CENTER" minHeight="200.0" minWidth="400.0" spacing="20.0" style="-fx-background-color: rgba(255, 255, 255, 0.1); -fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: rgba(255, 255, 255, 0.2); -fx-padding: 30;">
+            <ImageView fitHeight="69.0" fitWidth="100.0" opacity="0.91" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../img/icon2..png" />
+               </image>
+            </ImageView>
+                <Label alignment="CENTER" contentDisplay="TOP" style="-fx-text-fill: white;" text="Looking to buy used products? Browse our marketplace." wrapText="true">
+                    <font>
+                        <Font name="Inter SemiBold" size="20.0" />
+                    </font>
+                </Label>
+                <Button minWidth="200.0" mnemonicParsing="false" style="-fx-background-color: #da6dbc; -fx-text-fill: #0D47A1; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Buyer">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Button>
+            </VBox>
+        </HBox>
+
+    </VBox>
+   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+</StackPane>
