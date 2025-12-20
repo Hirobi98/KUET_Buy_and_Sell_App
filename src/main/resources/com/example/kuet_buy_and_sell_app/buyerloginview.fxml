@@ -1,61 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1200" prefWidth="1280" style="-fx-background-color: white; -fx-background-radius: 12;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kuet_buy_and_sell_app.HelloController">
+<AnchorPane prefHeight="720" prefWidth="1280" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kuet_buy_and_sell_app.HelloController">
     <children>
-        <VBox alignment="CENTER" prefHeight="1200.0" prefWidth="338.0" style="-fx-background-color: #fbd0c7; -fx-background-radius: 12 0 0 12;">
-            <children>
-                <Label text="LOGIN" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="28.0" />
-                    </font>
-                </Label>
-            </children>
+        <VBox alignment="CENTER" prefHeight="720.0" prefWidth="330.0" style="-fx-background-color: #fbd0c7;">
+            <Label text="LOGIN" textFill="WHITE"><font><Font name="System Bold" size="28.0" /></font></Label>
         </VBox>
-
-        <VBox alignment="CENTER" layoutX="300.0" prefHeight="1200.0" prefWidth="654.0" spacing="25.0">
-            <children>
-
-                <Label text="LOGIN" textFill="#da6dbc">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
-                </Label>
-
-                <HBox alignment="CENTER" prefWidth="350.0" spacing="10.0">
-               <ImageView fitHeight="21.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../../../../../../../../Downloads/email.png" />
-                  </image>
-               </ImageView>
-                    <TextField prefHeight="35.0" prefWidth="300.0" promptText="Email" style="-fx-border-color: #cccccc; -fx-border-width: 0 0 1 0; -fx-background-color: transparent;" />
-                </HBox>
-
-                <HBox alignment="CENTER" prefWidth="350.0" spacing="10.0">
-               <ImageView fitHeight="20.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../../../../../../../../Downloads/padlock.png" />
-                  </image>
-               </ImageView>
-                    <PasswordField prefHeight="35.0" prefWidth="300.0" promptText="Password" style="-fx-border-color: #cccccc; -fx-border-width: 0 0 1 0; -fx-background-color: transparent;" />
-                </HBox>
-
-                <Button mnemonicParsing="false" onAction="#switch_to_marketview" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #fbd0c7; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" text="LOGIN" />
-                 <Label text="If you dont have account , Sign up here!" textFill="#a0a0a0" />
-            <Button mnemonicParsing="false" onAction="#switch_to_signup" prefHeight="26.0" prefWidth="108.0" style="-fx-background-color: #fbd0c7; -fx-background-radius: 20;" text="Sign Up" />
-            <Button mnemonicParsing="false" onAction="#switch_to_home" prefHeight="20.0" prefWidth="121.0" style="-fx-background-color: #fbd0c7;" text="Back to home page" />
-
-            </children>
+        <VBox alignment="CENTER" layoutX="330.0" prefHeight="720.0" prefWidth="600.0" spacing="20.0">
+            <Label text="KUET LOGIN" textFill="#da6dbc"><font><Font name="System Bold" size="24.0" /></font></Label>
+            <TextField fx:id="txtRollLogin" maxWidth="300" promptText="KUET Roll" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: #ccc;" />
+            <PasswordField fx:id="pfPasswordLogin" maxWidth="300" promptText="Password" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: #ccc;" />
+            <Label fx:id="lblLoginStatus" textFill="RED" />
+            <Button onAction="#handleLogin" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #fbd0c7; -fx-text-fill: white; -fx-background-radius: 20;" text="LOGIN" />
+            <Button onAction="#switch_to_signup" text="Sign Up" />
+            <Button onAction="#switch_to_home" text="Home" />
         </VBox>
     </children>
 </AnchorPane>

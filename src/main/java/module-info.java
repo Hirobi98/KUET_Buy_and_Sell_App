@@ -10,6 +10,7 @@ module com.example.kuet_buy_and_sell_app {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens com.example.kuet_buy_and_sell_app to javafx.fxml;
     exports com.example.kuet_buy_and_sell_app;

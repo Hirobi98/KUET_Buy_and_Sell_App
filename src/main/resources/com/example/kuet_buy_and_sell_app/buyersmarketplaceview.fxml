@@ -30,7 +30,7 @@
                 <Button style="-fx-background-color: #0D47A1; -fx-text-fill: white; -fx-background-radius: 8;" text="Search" />
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="20.0">
-                <Label style="-fx-text-fill: white;" text="Welcome, Buyer (Roll: 2203xxx)" />
+                <Label style="-fx-text-fill: white;" text="Welcome, Buyer " />
                 <Button style="-fx-background-color: #42A5F5; -fx-text-fill: #0D47A1; -fx-font-weight: bold; -fx-background-radius: 8;" text="Wishlist" />
                 <Button onAction="#switch_to_home" style="-fx-background-color: #FF1744; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="Logout" />
             </HBox>
@@ -50,7 +50,7 @@
 
                         <ImageView fitHeight="120.0" fitWidth="120.0" preserveRatio="true">
 
-                            <Image url="@../../../../../../../../Downloads/furniture_desk.png" />
+                            <Image url="@../../../img/furniture_desk.png" />
                         </ImageView>
 
                         <VBox spacing="5.0" HBox.hgrow="ALWAYS">
@@ -75,13 +75,13 @@
 
                 <VBox maxWidth="800.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #BBDEFB; -fx-border-width: 1; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
                     <HBox spacing="20.0">
-                        <!-- Image (Left) -->
+
                         <ImageView fitHeight="120.0" fitWidth="120.0" preserveRatio="true">
 
 
-                            <Image url="@../../../../../../../../Downloads/book.png" />
+                            <Image url="@../../../img/book.png" />
                         </ImageView>
-                        <!-- Text Details and Buttons (Right) -->
+
                         <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                             <Label style="-fx-font-weight: bold; -fx-font-size: 24; -fx-text-fill: #0D47A1;" text="Item Name: EEE Textbook Set (1st Year)" />
                             <HBox alignment="CENTER_LEFT" spacing="20.0">
@@ -101,15 +101,15 @@
                     </HBox>
                 </VBox>
 
-                <!-- Example Item Post Card 3 (Mock Data) - With Image -->
+
                 <VBox maxWidth="800.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #BBDEFB; -fx-border-width: 1; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
                     <HBox spacing="20.0">
-                        <!-- Image (Left) -->
+
                         <ImageView fitHeight="120.0" fitWidth="120.0" preserveRatio="true">
-                            <!-- Replace this with your actual image path -->
-                            <Image url="@../../../../../../../../Downloads/fan.png" />
+
+                            <Image url="@../../../img/fan.png" />
                         </ImageView>
-                        <!-- Text Details and Buttons (Right) -->
+
                         <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                             <Label style="-fx-font-weight: bold; -fx-font-size: 24; -fx-text-fill: #0D47A1;" text="Item Name: Portable Electric Fan" />
                             <HBox alignment="CENTER_LEFT" spacing="20.0">
@@ -129,14 +129,14 @@
                     </HBox>
                 </VBox>
 
-                <!-- Placeholder to demonstrate scrolling - you would add more items here -->
+
                 <VBox maxHeight="50.0" VBox.vgrow="ALWAYS" />
 
             </VBox>
         </ScrollPane>
     </center>
 
-    <!-- LEFT: Category Filter Sidebar (optional, but good for design) -->
+
     <left>
         <VBox alignment="TOP_CENTER" minWidth="250.0" prefHeight="200.0" style="-fx-background-color: #FBD0C7FF; -fx-padding: 20 10 20 20;" BorderPane.alignment="CENTER">
             <Label style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: white;" text="Filter Categories">
