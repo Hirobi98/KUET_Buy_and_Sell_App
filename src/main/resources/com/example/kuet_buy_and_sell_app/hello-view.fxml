@@ -65,7 +65,7 @@
                         <Font name="Inter SemiBold" size="20.0" />
                     </font>
                 </Label>
-                <Button minWidth="200.0" mnemonicParsing="false" onAction="#switch_to_scene3" style="-fx-background-color: #55AEEFFF; -fx-text-fill: #FFFFFFFF; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Seller">
+                <Button minWidth="200.0" mnemonicParsing="false" onAction="#switch_to_seller_login" style="-fx-background-color: #55AEEFFF; -fx-text-fill: #FFFFFFFF; -fx-font-weight: bold; -fx-font-size: 18px; -fx-padding: 15 40; -fx-background-radius: 50;" text="Enter as Seller">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>

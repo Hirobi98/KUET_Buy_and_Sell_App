@@ -7,15 +7,10 @@ public class db {
     private Connection connection;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private static db instance = null;
-    private final String DB_url = "jdbc:sqlite:kuet_marketplace.db";
+    private final String DB_url = "jdbc:sqlite:kuet_marketplace2.db";
 
-    private db() {
+    private db() {}
 
-    }
-
-    /**
-     * Singleton instance getter
-     */
     public static db b() {
         if (instance == null) {
             instance = new db();
@@ -24,9 +19,6 @@ public class db {
         return instance;
     }
 
-    /**
-     * Initialize connection
-     */
     void c() {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -42,84 +34,99 @@ public class db {
         }
     }
 
-    /**
-     * Creates the table
-     */
     public void create_table() {
+        String buyerSql = "CREATE TABLE IF NOT EXISTS buyers (roll TEXT PRIMARY KEY, fullName TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL);";
+        String sellerSql = "CREATE TABLE IF NOT EXISTS sellers (phone TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, shopName TEXT NOT NULL, password TEXT NOT NULL);";
+        String itemsSql = "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, item_name TEXT NOT NULL, price REAL NOT NULL, category TEXT, description TEXT, image_path TEXT);";
 
-        String sql = "CREATE TABLE IF NOT EXISTS buyers (\n"
-                + "roll TEXT PRIMARY KEY,\n"
-                + "fullName TEXT NOT NULL,\n"
-                + "email TEXT NOT NULL UNIQUE,\n"
-                + "password TEXT NOT NULL\n" // No comma here
-                + ");";
         try (Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-            logger.info("Table 'buyers' created or verified successfully");
+            statement.execute(buyerSql);
+            statement.execute(sellerSql);
+            statement.execute(itemsSql);
+            logger.info("All tables verified successfully");
         } catch (SQLException e) {
             logger.severe("Error creating db table: " + e.getMessage());
         }
     }
 
-    /**
-     * Registers user
-     */
+    // --- BUYER METHODS ---
     public boolean register_user(user user1) {
         String sql = "INSERT INTO buyers(roll, fullName, email, password) VALUES(?, ?, ?, ?)";
-
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, user1.getRoll());
             pstmt.setString(2, user1.getName());
             pstmt.setString(3, user1.getEmail());
             pstmt.setString(4, user1.getPassword());
-
             pstmt.executeUpdate();
-            logger.info("Inserted data successfully for roll: " + user1.getRoll());
             return true;
         } catch (SQLException e) {
-
-            if (e.getMessage().contains("UNIQUE constraint failed")) {
-                logger.warning("Roll or Email already registered.");
-                return false;
-            }
-            logger.severe("Error inserting data: " + e.getMessage());
             return false;
         }
     }
 
-    /**
-     * Checks if email is already in use
-     */
-    public boolean is_email_registered(String email) {
-        String sql = "SELECT roll FROM buyers WHERE email = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            logger.severe("Error checking email: " + e.getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Finds a user by roll
-     */
     public user find_user_by_roll(String roll) {
         String sql = "SELECT fullName, email, password FROM buyers WHERE roll = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, roll);
             ResultSet rs = pstmt.executeQuery();
-
             if (rs.next()) {
-                String fullName = rs.getString("fullName");
-                String email = rs.getString("email");
-                String password = rs.getString("password");
-                return new user(fullName, email, roll, password);
+                return new user(rs.getString("fullName"), rs.getString("email"), roll, rs.getString("password"));
             }
         } catch (SQLException e) {
             logger.severe("Error retrieving user: " + e.getMessage());
         }
         return null;
+    }
+
+    // --- SELLER METHODS ---
+    public boolean register_seller(String name, String email, String phone, String shop, String pass) {
+        String sql = "INSERT INTO sellers(phone, name, email, shopName, password) VALUES(?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, phone);
+            pstmt.setString(2, name);
+            pstmt.setString(3, email);
+            pstmt.setString(4, shop);
+            pstmt.setString(5, pass);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean authenticate_seller(String phone, String password) {
+        String sql = "SELECT name FROM sellers WHERE phone = ? AND password = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, phone);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    // --- ITEM METHODS ---
+    public boolean add_item(String name, double price, String category, String description, String imagePath) {
+        String query = "INSERT INTO items (item_name, price, category, description, image_path) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, name);
+            ps.setDouble(2, price);
+            ps.setString(3, category);
+            ps.setString(4, description);
+            ps.setString(5, imagePath);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public ResultSet getAllItems() {
+        try {
+            String query = "SELECT * FROM items ORDER BY id DESC";
+            Statement st = connection.createStatement();
+            return st.executeQuery(query);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 }
