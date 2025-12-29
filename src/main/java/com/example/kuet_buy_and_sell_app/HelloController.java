@@ -1,5 +1,6 @@
 package com.example.kuet_buy_and_sell_app;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,38 +12,84 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class HelloController {
-    private final db databaseManager = db.b();
+    final db databaseManager = db.b();
 
+    // Buyer Signup/Login
     @FXML private TextField txtNameSignup, txtEmailSignup, txtRollSignup;
     @FXML private PasswordField pfPasswordSignup;
     @FXML private Label lblSignupStatus;
-
     @FXML private TextField txtRollLogin;
     @FXML private PasswordField pfPasswordLogin;
     @FXML private Label lblLoginStatus;
 
-
+    // Seller Signup/Login
     @FXML private TextField txtSellerName, txtSellerEmail, txtSellerPhone, txtSellerShop;
     @FXML private PasswordField pfSellerPass;
     @FXML private Label lblSellerSignupStatus;
-
     @FXML private TextField txtSellerPhoneLogin;
     @FXML private PasswordField pfSellerPassLogin;
     @FXML private Label lblSellerLoginStatus;
 
+    // Item Posting & Dashboard
     @FXML private TextField nameField, priceField, priceField1; // priceField1 is Category
-    @FXML private VBox itemPostContainer;
+
+   // For dashboard count
+    @FXML protected VBox itemPostContainer;
+    @FXML protected Label lblSellerPostCount;
+
 
     @FXML
     public void initialize() {
+        // Use Platform.runLater to ensure FXML nodes are fully injected before loading data
+        Platform.runLater(() -> {
+            if (itemPostContainer != null) {
+                loadMarketplace();
+            }
+        });
+    }
 
-        if (itemPostContainer != null) {
-            loadMarketplace();
+    public void loadMarketplace() {
+        if (itemPostContainer == null) return;
+        itemPostContainer.getChildren().clear();
+
+        try (ResultSet rs = databaseManager.getAvailableItems()) {
+            while (rs != null && rs.next()) {
+                loadCardIntoContainer(rs, false);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
+    protected void loadCardIntoContainer(ResultSet rs, boolean isSellerView) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("card.fxml"));
+            VBox cardBox = fxmlLoader.load();
+            cardcontroller card = fxmlLoader.getController();
+
+            int id = rs.getInt("id");
+            String name = rs.getString("item_name");
+            double price = rs.getDouble("price");
+            String cat = rs.getString("category");
+            String desc = rs.getString("description");
+            String img = rs.getString("image_path");
+            String status = rs.getString("status");
+            String itemSellerPhone = rs.getString("seller_phone");
+
+            boolean isOwner = (seller.getPhone() != null && seller.getPhone().equals(itemSellerPhone));
+            card.setData(id, name, cat, price, desc, img, status, isOwner || isSellerView, this);
+
+            itemPostContainer.getChildren().add(cardBox);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // --- REGISTRATION & LOGIN LOGIC ---
 
     @FXML
     public void handleSignup(ActionEvent event) {
@@ -84,7 +131,7 @@ public class HelloController {
         try {
             if (databaseManager.register_seller(txtSellerName.getText(), txtSellerEmail.getText(),
                     txtSellerPhone.getText(), txtSellerShop.getText(), pfSellerPass.getText())) {
-                loadScene(event, "sellerloginview.fxml", "Seller Login");
+                loadScene(event, "sellerlogin.fxml", "Seller Login");
             } else {
                 lblSellerSignupStatus.setText("Error: Already registered.");
             }
@@ -92,44 +139,46 @@ public class HelloController {
     }
 
     @FXML
-    public void handleSellerLogin(ActionEvent event) throws IOException {
-        if (databaseManager.authenticate_seller(txtSellerPhoneLogin.getText(), pfSellerPassLogin.getText())) {
-            switch_to_post_item(event);
+    public void handleSellerLogin(ActionEvent event) {
+        String phone = txtSellerPhoneLogin.getText();
+        String pass = pfSellerPassLogin.getText();
+
+        if (databaseManager.authenticate_seller(phone, pass)) {
+            String name = databaseManager.getSellerNameByPhone(phone);
+            seller.startSession(phone, name);
+            try {
+                switch_to_seller_dashboard(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
-            lblSellerLoginStatus.setText("Invalid credentials.");
+            lblSellerLoginStatus.setText("Invalid phone or password!");
         }
     }
+
+
+    // --- ITEM & MARKETPLACE LOGIC ---
 
     @FXML
     public void handlePostItem(ActionEvent event) {
         try {
             String name = nameField.getText();
-            double price = Double.parseDouble(priceField.getText());
+            String priceStr = priceField.getText();
             String cat = priceField1.getText();
-            if (databaseManager.add_item(name, price, cat, "No description", "")) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Item posted!");
-                switch_to_seller_marketview(event);
-            }
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Check input fields.");
-        }
-    }
+            String sPhone = seller.getPhone();
+            String sName = seller.getName();
 
-    public void loadMarketplace() {
-        itemPostContainer.getChildren().clear();
-        try {
-            ResultSet rs = databaseManager.getAllItems();
-            while (rs != null && rs.next()) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("card.fxml"));
-                Node card = loader.load();
-                cardcontroller controller = loader.getController();
-                controller.setData(rs.getString("item_name"), rs.getString("category"),
-                        rs.getDouble("price"), rs.getString("description"), rs.getString("image_path"));
-                itemPostContainer.getChildren().add(card);
+            if (name.isEmpty() || priceStr.isEmpty()) return;
+
+            double price = Double.parseDouble(priceStr);
+
+            if (databaseManager.add_item(name, price, cat, "Available", "", sPhone, sName)) {
+                switch_to_seller_dashboard(event);
             }
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+    // --- NAVIGATION LOGIC ---
 
     @FXML
     public void switch_to_home(ActionEvent event) throws IOException {
@@ -147,23 +196,12 @@ public class HelloController {
     }
 
     @FXML
-    public void switch_to_scene3(ActionEvent event) throws IOException {
-
-        loadScene(event, "sellerlogin.fxml", "Seller Login");
-    }
-
-    @FXML
     public void switch_to_marketview(ActionEvent event) throws IOException {
         loadScene(event, "buyersmarketplaceview.fxml", "Marketplace");
-    }
-    @FXML
-    public void switch_to_seller_marketview(ActionEvent event) throws IOException {
-        loadScene(event, "sellermarketview.fxml", "Marketplace");
     }
 
     @FXML
     public void switch_to_seller_login(ActionEvent event) throws IOException {
-
         loadScene(event, "sellerlogin.fxml", "Seller Login");
     }
 
@@ -178,11 +216,26 @@ public class HelloController {
     }
 
     @FXML
-    public void handleCancel(ActionEvent event) throws IOException {
+    public void switch_to_seller_dashboard(ActionEvent event) throws IOException {
+        loadScene(event, "seller_dashboard.fxml", "Seller Dashboard");
+    }
+
+    @FXML
+    public void handleLogout(ActionEvent event) throws IOException {
+        seller.clear();
         switch_to_home(event);
     }
 
-    private void loadScene(ActionEvent event, String fxmlFile, String title) throws IOException {
+    @FXML
+    public void handleCancel(ActionEvent event) throws IOException {
+        if (seller.getPhone() != null) {
+            switch_to_seller_dashboard(event);
+        } else {
+            switch_to_home(event);
+        }
+    }
+
+    protected void loadScene(ActionEvent event, String fxmlFile, String title) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = loader.load();

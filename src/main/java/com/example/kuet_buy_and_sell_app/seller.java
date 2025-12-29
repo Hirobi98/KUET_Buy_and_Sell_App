@@ -2,19 +2,23 @@ package com.example.kuet_buy_and_sell_app;
 
 
 public class seller {
-    private static String currentSellerPhone;
-    private static String currentSellerName;
+    private static String loggedInPhone = null;
+    private static String loggedInName = null;
 
     public static void startSession(String phone, String name) {
-        currentSellerPhone = phone;
-        currentSellerName = name;
+        loggedInPhone = phone;
+        loggedInName = name;
     }
 
-    public static String getPhone() { return currentSellerPhone; }
-    public static String getName() { return currentSellerName; }
+    public static String getPhone() { return loggedInPhone; }
+    public static String getName() { return loggedInName; }
 
     public static void clear() {
-        currentSellerPhone = null;
-        currentSellerName = null;
+        loggedInPhone = null;
+        loggedInName = null;
+    }
+
+    public static void logout() {
+        clear();
     }
 }

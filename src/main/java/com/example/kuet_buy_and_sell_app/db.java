@@ -3,14 +3,22 @@ package com.example.kuet_buy_and_sell_app;
 import java.sql.*;
 import java.util.logging.Logger;
 
+/**
+ * Singleton class to manage SQLite database operations.
+ */
 public class db {
     private Connection connection;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private static db instance = null;
-    private final String DB_url = "jdbc:sqlite:kuet_marketplace2.db";
+
+    // Fixed: The actual database file path string
+    private final String DB_url = "jdbc:sqlite:kuet_marketplace4.db";
 
     private db() {}
 
+    /**
+     * Singleton accessor.
+     */
     public static db b() {
         if (instance == null) {
             instance = new db();
@@ -19,7 +27,10 @@ public class db {
         return instance;
     }
 
-    void c() {
+    /**
+     * Connects to the database and initializes tables.
+     */
+    public void c() {
         try {
             Class.forName("org.sqlite.JDBC");
             if (connection == null || connection.isClosed()) {
@@ -37,15 +48,30 @@ public class db {
     public void create_table() {
         String buyerSql = "CREATE TABLE IF NOT EXISTS buyers (roll TEXT PRIMARY KEY, fullName TEXT NOT NULL, email TEXT NOT NULL UNIQUE, password TEXT NOT NULL);";
         String sellerSql = "CREATE TABLE IF NOT EXISTS sellers (phone TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, shopName TEXT NOT NULL, password TEXT NOT NULL);";
-        String itemsSql = "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, item_name TEXT NOT NULL, price REAL NOT NULL, category TEXT, description TEXT, image_path TEXT);";
+        String itemSql = "CREATE TABLE IF NOT EXISTS items ("
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "item_name TEXT, "
+                + "price REAL, "
+                + "category TEXT, "
+                + "description TEXT, "
+                + "image_path TEXT, "
+                + "seller_phone TEXT, "
+                + "seller_name TEXT, "
+                + "status TEXT DEFAULT 'Available');";
 
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(buyerSql);
-            statement.execute(sellerSql);
-            statement.execute(itemsSql);
-            logger.info("All tables verified successfully");
+        try (Statement st = connection.createStatement()) {
+            st.execute(buyerSql);
+            st.execute(sellerSql);
+            st.execute(itemSql);
+
+            // Column check logic
+            try {
+                st.execute("ALTER TABLE items ADD COLUMN status TEXT DEFAULT 'Available'");
+            } catch (SQLException e) {
+                // Column already exists, safe to ignore
+            }
         } catch (SQLException e) {
-            logger.severe("Error creating db table: " + e.getMessage());
+            logger.severe("Table Creation Error: " + e.getMessage());
         }
     }
 
@@ -99,34 +125,121 @@ public class db {
             pstmt.setString(1, phone);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+            if (rs.next()) {
+                seller.startSession(phone, rs.getString("name"));
+                return true;
+            }
         } catch (SQLException e) {
-            return false;
+            e.printStackTrace();
         }
+        return false;
+    }
+
+    public String getSellerNameByPhone(String phone) {
+        String sql = "SELECT name FROM sellers WHERE phone = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, phone);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            logger.severe("Error getting seller name: " + e.getMessage());
+        }
+        return "Seller";
     }
 
     // --- ITEM METHODS ---
-    public boolean add_item(String name, double price, String category, String description, String imagePath) {
-        String query = "INSERT INTO items (item_name, price, category, description, image_path) VALUES (?, ?, ?, ?, ?)";
+    public boolean add_item(String name, double price, String category, String description, String imagePath, String sPhone, String sName) {
+        String query = "INSERT INTO items (item_name, price, category, description, image_path, seller_phone, seller_name, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Available')";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, name);
             ps.setDouble(2, price);
             ps.setString(3, category);
             ps.setString(4, description);
             ps.setString(5, imagePath);
+            ps.setString(6, sPhone);
+            ps.setString(7, sName);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
         }
     }
 
-    public ResultSet getAllItems() {
+    public boolean updateItemStatus(int id, String newStatus) {
+        String query = "UPDATE items SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public ResultSet getAvailableItems() {
         try {
-            String query = "SELECT * FROM items ORDER BY id DESC";
             Statement st = connection.createStatement();
-            return st.executeQuery(query);
+            return st.executeQuery("SELECT * FROM items WHERE status = 'Available' ORDER BY id DESC");
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public ResultSet getSellerItems(String phone) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM items WHERE seller_phone = ? ORDER BY id DESC");
+            ps.setString(1, phone);
+            return ps.executeQuery();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public int getSellerPostCount(String phone) {
+        String sql = "SELECT COUNT(*) as total FROM items WHERE seller_phone = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, phone);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            logger.severe("Error counting posts: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public boolean deleteItem(int itemId) {
+        String query = "DELETE FROM items WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, itemId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.severe("Error deleting item: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            logger.severe("Error closing database connection: " + e.getMessage());
+        }
+    }
+
+    // Helper to ensure connection is live for controllers
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                c();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
     }
 }

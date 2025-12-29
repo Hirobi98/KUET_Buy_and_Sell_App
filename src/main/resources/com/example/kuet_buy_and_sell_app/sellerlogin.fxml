@@ -23,7 +23,7 @@
                 <Label text="PHONE" /><TextField fx:id="txtSellerPhoneLogin" promptText="Phone Number" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: #ccc;" />
                 <Label text="PASSWORD" /><PasswordField fx:id="pfSellerPassLogin" promptText="Password" style="-fx-background-color: transparent; -fx-border-width: 0 0 1 0; -fx-border-color: #ccc;" />
                 <Label fx:id="lblSellerLoginStatus" textFill="RED" />
-                <Button onAction="#switch_to_post_item" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20;" text="LOGIN" />
+                <Button onAction="#handleSellerLogin" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20;" text="LOGIN" />
                 <HBox spacing="10">
                     <Button onAction="#switch_to_home" text="Back" />
                     <Button onAction="#switch_to_seller_signup" text="Need an account?Sign Up here " />
