@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #E3F2FD;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kuet_buy_and_sell_app.HelloController">
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: #fbd0c7; -fx-padding: 20 50;">
+            <Label style="-fx-text-fill: white;" text="Seller Dashboard">
+                <font>
+                    <Font name="System Bold" size="28.0" />
+                </font>
+            </Label>
+            <HBox alignment="CENTER_RIGHT" spacing="20.0" HBox.hgrow="ALWAYS">
+                <Label text="Total Posts:" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Label fx:id="lblSellerPostCount" style="-fx-background-color: white; -fx-padding: 5 15; -fx-background-radius: 15;" text="0" textFill="#fbd0c7">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Button onAction="#switch_to_post_item" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;" text="+ Post New Item" />
+                <Button onAction="#handleCancel" style="-fx-background-color: white; -fx-text-fill: #fbd0c7; -fx-font-weight: bold; -fx-background-radius: 20;" text="Logout" />
+            </HBox>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox fx:id="itemPostContainer" alignment="TOP_CENTER" spacing="20.0" style="-fx-padding: 30;">
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

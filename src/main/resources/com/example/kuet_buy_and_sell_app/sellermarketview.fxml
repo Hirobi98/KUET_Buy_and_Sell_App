@@ -27,9 +27,8 @@
                 </VBox.margin>
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="20.0">
-                <Label style="-fx-text-fill: white;" text="Welcome, Buyer " />
-                <Button style="-fx-background-color: #42A5F5; -fx-text-fill: #0D47A1; -fx-font-weight: bold; -fx-background-radius: 8;" text="Wishlist" />
-                <Button onAction="#switch_to_home" style="-fx-background-color: #FF1744; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="Logout" />
+                <Label style="-fx-text-fill: white;" text="To explore the market login as buyer!!" />
+                <Button onAction="#switch_to_scene2" style="-fx-background-color: #FF1744; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;" text="Log In as Buyer" />
             </HBox>
         </HBox>
     </top>

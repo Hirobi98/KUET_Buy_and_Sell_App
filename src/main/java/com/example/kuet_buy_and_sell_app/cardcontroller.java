@@ -15,7 +15,6 @@ public class cardcontroller {
         priceLabel.setText("Price: ৳ " + price);
         descriptionLabel.setText(desc);
 
-        // Load image (using a fallback if path is null)
         try {
             if (imgPath != null && !imgPath.isEmpty()) {
                 itemImage.setImage(new Image(getClass().getResourceAsStream(imgPath)));

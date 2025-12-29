@@ -15,39 +15,34 @@ import java.sql.ResultSet;
 public class HelloController {
     private final db databaseManager = db.b();
 
-    // BUYER SIGNUP
     @FXML private TextField txtNameSignup, txtEmailSignup, txtRollSignup;
     @FXML private PasswordField pfPasswordSignup;
     @FXML private Label lblSignupStatus;
 
-    // BUYER LOGIN
     @FXML private TextField txtRollLogin;
     @FXML private PasswordField pfPasswordLogin;
     @FXML private Label lblLoginStatus;
 
-    // SELLER SIGNUP
+
     @FXML private TextField txtSellerName, txtSellerEmail, txtSellerPhone, txtSellerShop;
     @FXML private PasswordField pfSellerPass;
     @FXML private Label lblSellerSignupStatus;
 
-    // SELLER LOGIN
     @FXML private TextField txtSellerPhoneLogin;
     @FXML private PasswordField pfSellerPassLogin;
     @FXML private Label lblSellerLoginStatus;
 
-    // POST ITEM
     @FXML private TextField nameField, priceField, priceField1; // priceField1 is Category
     @FXML private VBox itemPostContainer;
 
     @FXML
     public void initialize() {
-        // Automatically runs when FXML is loaded
+
         if (itemPostContainer != null) {
             loadMarketplace();
         }
     }
 
-    // --- LOGIC METHODS ---
 
     @FXML
     public void handleSignup(ActionEvent event) {
@@ -113,7 +108,7 @@ public class HelloController {
             String cat = priceField1.getText();
             if (databaseManager.add_item(name, price, cat, "No description", "")) {
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Item posted!");
-                switch_to_marketview(event);
+                switch_to_seller_marketview(event);
             }
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Check input fields.");
@@ -135,7 +130,6 @@ public class HelloController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // --- NAVIGATION METHODS (Must match FXML exactly) ---
 
     @FXML
     public void switch_to_home(ActionEvent event) throws IOException {
@@ -154,13 +148,17 @@ public class HelloController {
 
     @FXML
     public void switch_to_scene3(ActionEvent event) throws IOException {
-        // Often used for Seller Login in your setup
+
         loadScene(event, "sellerlogin.fxml", "Seller Login");
     }
 
     @FXML
     public void switch_to_marketview(ActionEvent event) throws IOException {
         loadScene(event, "buyersmarketplaceview.fxml", "Marketplace");
+    }
+    @FXML
+    public void switch_to_seller_marketview(ActionEvent event) throws IOException {
+        loadScene(event, "sellermarketview.fxml", "Marketplace");
     }
 
     @FXML
@@ -184,7 +182,6 @@ public class HelloController {
         switch_to_home(event);
     }
 
-    // Helper for scene changing
     private void loadScene(ActionEvent event, String fxmlFile, String title) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
