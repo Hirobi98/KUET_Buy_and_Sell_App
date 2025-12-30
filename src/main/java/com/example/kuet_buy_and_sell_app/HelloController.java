@@ -78,12 +78,13 @@ public class HelloController {
             double price = rs.getDouble("price");
             String desc = rs.getString("description");
             String img = rs.getString("image_path");
-            String status = rs.getString("status");
 
-            // NEW: Extract seller name from ResultSet
+
+            // NEW: Passing status and owner name to the card
+            String status = rs.getString("status");
             String ownerName = rs.getString("seller_name");
 
-            // Updated setData call (see cardcontroller changes below)
+            // UPDATED: Now passing all 10 parameters required by cardcontroller
             controller.setData(id, name, cat, price, desc, img, status, isOwnerView, ownerName, this);
 
             itemPostContainer.getChildren().add(cardBox);

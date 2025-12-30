@@ -70,9 +70,34 @@ public class db {
             } catch (SQLException e) {
                 // Column already exists, safe to ignore
             }
+
+            try {
+                st.execute("ALTER TABLE items ADD COLUMN buyer_roll TEXT");
+            } catch (SQLException e) {
+                // Column already exists, safe to ignore
+            }
         } catch (SQLException e) {
             logger.severe("Table Creation Error: " + e.getMessage());
         }
+    }
+
+    public boolean requestPurchase(int itemId, String buyerRoll) {
+        String sql = "UPDATE items SET status = 'Pending', buyer_roll = ? WHERE id = ? AND status = 'Available'";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, buyerRoll);
+            pstmt.setInt(2, itemId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) { return false; }
+    }
+
+    // NEW: For Seller to Accept or Decline
+    public boolean updateItemStatus(int itemId, String newStatus) {
+        String sql = "UPDATE items SET status = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, newStatus);
+            pstmt.setInt(2, itemId);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) { return false; }
     }
 
     // --- BUYER METHODS ---
@@ -166,16 +191,6 @@ public class db {
         }
     }
 
-    public boolean updateItemStatus(int id, String newStatus) {
-        String query = "UPDATE items SET status = ? WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, newStatus);
-            ps.setInt(2, id);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
 
     public ResultSet getAvailableItems() {
         // FIX: Explicitly include 'seller_name' in the query

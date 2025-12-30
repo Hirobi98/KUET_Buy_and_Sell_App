@@ -11,6 +11,8 @@ public class cardcontroller {
     @FXML private Label itemNameLabel, categoryLabel, priceLabel, descriptionLabel, statusLabel;
     @FXML private ImageView itemImage;
     @FXML private Button btnDelete, btnMarkSold, btnAction;
+    @FXML private Button btnAccept, btnDecline;
+    @FXML private Label ownerNameLabel;
 
     private int itemId;
     private HelloController parentController;
@@ -18,7 +20,7 @@ public class cardcontroller {
     /**
      * Populates the card with data from the database.
      */
-    @FXML private Label ownerNameLabel; // You must add this fx:id to your card.fxml
+
 
     public void setData(int id, String name, String cat, double price, String desc, String imgPath, String status, boolean isOwner, String ownerName, HelloController parent) {
         this.itemId = id;
@@ -56,12 +58,37 @@ public class cardcontroller {
             setDefaultImage();
         }
 
-        // Visibility logic: Seller sees Delete/Sold, Buyer sees "Buy Now" (btnAction)
-        if (btnDelete != null) btnDelete.setVisible(isOwner);
-        if (btnMarkSold != null) btnMarkSold.setVisible(isOwner && !"Sold".equalsIgnoreCase(status));
+        if (btnAccept != null) { btnAccept.setVisible(false); btnAccept.setManaged(false); }
+        if (btnDecline != null) { btnDecline.setVisible(false); btnDecline.setManaged(false); }
 
-        // Hide the default marketplace "Buy Now" button if the owner is looking at their own card
-        if (btnAction != null) btnAction.setVisible(!isOwner);
+        if (isOwner) {
+            // Seller Controls
+            if (btnDelete != null) btnDelete.setVisible(true);
+            if (btnAction != null) btnAction.setVisible(false); // Seller can't buy own item
+
+            if ("Pending".equalsIgnoreCase(status)) {
+                // Someone wants to buy! Show Accept/Decline
+                if (btnAccept != null) { btnAccept.setVisible(true); btnAccept.setManaged(true); }
+                if (btnDecline != null) { btnDecline.setVisible(true); btnDecline.setManaged(true); }
+                if (btnMarkSold != null) btnMarkSold.setVisible(false);
+            } else {
+                if (btnMarkSold != null) btnMarkSold.setVisible(!"Sold".equalsIgnoreCase(status));
+            }
+        } else {
+            // Buyer Controls
+            if (btnDelete != null) btnDelete.setVisible(false);
+            if (btnMarkSold != null) btnMarkSold.setVisible(false);
+
+            // Show "Buy Now" only if item is Available
+            if (btnAction != null) {
+                btnAction.setVisible("Available".equalsIgnoreCase(status));
+            }
+
+            // Special message for Buyer if seller accepted
+            if ("Accepted".equalsIgnoreCase(status) && statusLabel != null) {
+                statusLabel.setText("ACCEPTED! Meet at KUET Cafeteria");
+            }
+        }
     }
 
     private void setDefaultImage() {
@@ -69,6 +96,31 @@ public class cardcontroller {
             InputStream is = getClass().getResourceAsStream("/img/default_item.png");
             if (is != null) itemImage.setImage(new Image(is));
         } catch (Exception ignored) {}
+    }
+
+    // NEW: Action for the "Buy Now" button
+    @FXML
+    private void handleBuyNow() {
+        String myRoll = user.getRoll();
+        if (db.b().requestPurchase(itemId, myRoll)) {
+            refreshUI();
+        }
+    }
+
+    // NEW: Action for Seller to Accept
+    @FXML
+    private void handleAccept() {
+        if (db.b().updateItemStatus(itemId, "Accepted")) {
+            refreshUI();
+        }
+    }
+
+    // NEW: Action for Seller to Decline
+    @FXML
+    private void handleDecline() {
+        if (db.b().updateItemStatus(itemId, "Available")) {
+            refreshUI();
+        }
     }
 
     @FXML
