@@ -10,31 +10,42 @@
     <children>
         <HBox spacing="20.0">
             <children>
-
+                <!-- Item Image -->
                 <ImageView fx:id="itemImage" fitHeight="120.0" fitWidth="120.0" preserveRatio="true" />
 
                 <VBox spacing="8.0" HBox.hgrow="ALWAYS">
                     <children>
-
+                        <!-- Title and Price -->
                         <HBox alignment="CENTER_LEFT">
                             <children>
                                 <Label fx:id="itemNameLabel" style="-fx-font-weight: bold; -fx-font-size: 22; -fx-text-fill: #0D47A1;" text="Item Name" />
+
                                 <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="ownerNameLabel" style="-fx-font-size: 14; -fx-text-fill: #757575;" text="Seller Name" />
                                 <Label fx:id="priceLabel" style="-fx-font-weight: bold; -fx-font-size: 18; -fx-text-fill: #00E676;" text="৳ 0.00" />
                             </children>
                         </HBox>
 
+                        <!-- Category and Status -->
+                        <HBox spacing="15">
+                            <children>
+                                <Label fx:id="categoryLabel" style="-fx-font-weight: bold; -fx-text-fill: #42A5F5; -fx-font-size: 14;" text="Category" />
+                                <Label fx:id="statusLabel" style="-fx-font-size: 14;" text="Available" />
+                            </children>
+                        </HBox>
 
-                        <Label fx:id="categoryLabel" style="-fx-font-weight: bold; -fx-text-fill: #42A5F5; -fx-font-size: 14;" text="Category" />
+                        <!-- Description -->
+                        <Label fx:id="descriptionLabel" prefWidth="450.0" style="-fx-text-fill: #546e7a;" text="Description text goes here..." wrapText="true" />
 
-
-                        <Label fx:id="descriptionLabel" prefWidth="450.0" style="-fx-text-fill: #546e7a;" text="Description..." wrapText="true" />
-
-
+                        <!-- Action Buttons -->
                         <HBox alignment="CENTER_RIGHT" spacing="12.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <Button mnemonicParsing="false" style="-fx-background-color: #f1f1f1; -fx-text-fill: #7f8c8d; -fx-font-weight: bold; -fx-background-radius: 5;" text="Wishlist" />
-                                <Button fx:id="btnAction" mnemonicParsing="false"  prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #00E676; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Buy Now" />
+                                <!-- Seller Only Buttons -->
+                                <Button fx:id="btnMarkSold" onAction="#handleMarkSold" mnemonicParsing="false" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Mark as Sold" visible="false" />
+                                <Button fx:id="btnDelete" onAction="#handleDelete" mnemonicParsing="false" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Delete" visible="false" />
+
+                                <!-- Buyer Only Button -->
+                                <Button fx:id="btnAction" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #00E676; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Buy Now" />
                             </children>
                         </HBox>
                     </children>

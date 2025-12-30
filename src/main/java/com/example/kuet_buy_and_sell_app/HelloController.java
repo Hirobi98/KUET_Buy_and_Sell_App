@@ -45,7 +45,7 @@ public class HelloController {
     public void initialize() {
         // Use Platform.runLater to ensure FXML nodes are fully injected before loading data
         Platform.runLater(() -> {
-            if (itemPostContainer != null) {
+            if (itemPostContainer != null && !(this instanceof SellerDashboardController)) {
                 loadMarketplace();
             }
         });
@@ -65,31 +65,30 @@ public class HelloController {
         }
     }
 
-    protected void loadCardIntoContainer(ResultSet rs, boolean isSellerView) {
+    protected void loadCardIntoContainer(ResultSet rs, boolean isOwnerView) throws SQLException {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("card.fxml"));
-            VBox cardBox = fxmlLoader.load();
-            cardcontroller card = fxmlLoader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("card.fxml"));
+            VBox cardBox = loader.load();
+            cardcontroller controller = loader.getController();
 
             int id = rs.getInt("id");
+            // FIX: Changed "name" to "item_name" to match your DB schema
             String name = rs.getString("item_name");
-            double price = rs.getDouble("price");
             String cat = rs.getString("category");
+            double price = rs.getDouble("price");
             String desc = rs.getString("description");
             String img = rs.getString("image_path");
             String status = rs.getString("status");
 
-            // Safe retrieval of seller_phone (The fix in db.java makes this available)
-            String itemSellerPhone = rs.getString("seller_phone");
+            // NEW: Extract seller name from ResultSet
+            String ownerName = rs.getString("seller_name");
 
-            // Check if current logged in seller owns this post
-            boolean isOwner = (seller.getPhone() != null && seller.getPhone().equals(itemSellerPhone));
-
-            card.setData(id, name, cat, price, desc, img, status, isOwner || isSellerView, this);
+            // Updated setData call (see cardcontroller changes below)
+            controller.setData(id, name, cat, price, desc, img, status, isOwnerView, ownerName, this);
 
             itemPostContainer.getChildren().add(cardBox);
-        } catch (Exception e) {
-            System.err.println("Error rendering item card: " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

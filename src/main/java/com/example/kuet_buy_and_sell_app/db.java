@@ -178,24 +178,26 @@ public class db {
     }
 
     public ResultSet getAvailableItems() {
-        // FIXED: Added seller_phone and category to ensure all fields are available for the card
-        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone FROM items WHERE status = 'Available'";
+        // FIX: Explicitly include 'seller_name' in the query
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone, seller_name FROM items WHERE status = 'Available'";
         try {
             Statement stmt = connection.createStatement();
             return stmt.executeQuery(sql);
         } catch (SQLException e) {
+            logger.severe("Error fetching available items: " + e.getMessage());
             return null;
         }
     }
 
     public ResultSet getSellerItems(String phone) {
-        // FIXED: Explicitly select columns to match logic in controllers
-        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone FROM items WHERE seller_phone = ?";
+        // FIX: Explicitly include 'seller_name' in the query
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone, seller_name FROM items WHERE seller_phone = ?";
         try {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, phone);
             return pstmt.executeQuery();
         } catch (SQLException e) {
+            logger.severe("Error fetching seller items: " + e.getMessage());
             return null;
         }
     }
