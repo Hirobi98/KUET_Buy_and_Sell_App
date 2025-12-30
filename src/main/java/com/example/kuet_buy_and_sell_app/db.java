@@ -178,19 +178,23 @@ public class db {
     }
 
     public ResultSet getAvailableItems() {
+        // FIXED: Added seller_phone and category to ensure all fields are available for the card
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone FROM items WHERE status = 'Available'";
         try {
-            Statement st = connection.createStatement();
-            return st.executeQuery("SELECT * FROM items WHERE status = 'Available' ORDER BY id DESC");
+            Statement stmt = connection.createStatement();
+            return stmt.executeQuery(sql);
         } catch (SQLException e) {
             return null;
         }
     }
 
     public ResultSet getSellerItems(String phone) {
+        // FIXED: Explicitly select columns to match logic in controllers
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone FROM items WHERE seller_phone = ?";
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM items WHERE seller_phone = ? ORDER BY id DESC");
-            ps.setString(1, phone);
-            return ps.executeQuery();
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, phone);
+            return pstmt.executeQuery();
         } catch (SQLException e) {
             return null;
         }

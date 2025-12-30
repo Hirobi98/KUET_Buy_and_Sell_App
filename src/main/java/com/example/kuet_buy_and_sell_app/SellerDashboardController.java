@@ -25,14 +25,15 @@ public class SellerDashboardController extends HelloController {
 
     public void refreshDashboard() {
         String sPhone = seller.getPhone();
-        // Accessing 'itemPostContainer' and 'databaseManager' which are now 'protected' in HelloController
         if (sPhone == null || itemPostContainer == null) return;
 
+        // Update post count label
         int count = databaseManager.getSellerPostCount(sPhone);
         if (lblSellerPostCount != null) {
             lblSellerPostCount.setText(String.valueOf(count));
         }
 
+        // Load items specific to this seller
         itemPostContainer.getChildren().clear();
         try (ResultSet rs = databaseManager.getSellerItems(sPhone)) {
             while (rs != null && rs.next()) {

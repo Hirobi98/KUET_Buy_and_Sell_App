@@ -55,7 +55,8 @@ public class HelloController {
         if (itemPostContainer == null) return;
         itemPostContainer.getChildren().clear();
 
-        try (ResultSet rs = databaseManager.getAvailableItems()) {
+        ResultSet rs = databaseManager.getAvailableItems();
+        try {
             while (rs != null && rs.next()) {
                 loadCardIntoContainer(rs, false);
             }
@@ -77,14 +78,18 @@ public class HelloController {
             String desc = rs.getString("description");
             String img = rs.getString("image_path");
             String status = rs.getString("status");
+
+            // Safe retrieval of seller_phone (The fix in db.java makes this available)
             String itemSellerPhone = rs.getString("seller_phone");
 
+            // Check if current logged in seller owns this post
             boolean isOwner = (seller.getPhone() != null && seller.getPhone().equals(itemSellerPhone));
+
             card.setData(id, name, cat, price, desc, img, status, isOwner || isSellerView, this);
 
             itemPostContainer.getChildren().add(cardBox);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error rendering item card: " + e.getMessage());
         }
     }
 
@@ -164,19 +169,23 @@ public class HelloController {
         try {
             String name = nameField.getText();
             String priceStr = priceField.getText();
-            String cat = priceField1.getText();
+            String cat = priceField1.getText(); // This is the Category field
             String sPhone = seller.getPhone();
             String sName = seller.getName();
 
-            if (name.isEmpty() || priceStr.isEmpty()) return;
+            if (name.isEmpty() || priceStr.isEmpty() || sPhone == null) {
+                System.out.println("Please login and fill all fields");
+                return;
+            }
 
-            double price = Double.parseDouble(priceStr);
-
-            if (databaseManager.add_item(name, price, cat, "Available", "", sPhone, sName)) {
+            if (databaseManager.add_item(name, Double.parseDouble(priceStr), cat, "No description", "", sPhone, sName)) {
                 switch_to_seller_dashboard(event);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     // --- NAVIGATION LOGIC ---
 
