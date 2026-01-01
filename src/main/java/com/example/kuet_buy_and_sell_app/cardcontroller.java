@@ -44,13 +44,19 @@ public class cardcontroller {
 
         // Image Loading Logic
         if (itemImage != null) {
-            if (imgPath != null && !imgPath.isEmpty()) {
+            if (imgPath != null && !imgPath.trim().isEmpty()) {
                 try {
-                    // This will handle the file:/// URI path saved in the database
-                    Image image = new Image(imgPath, true); // true = load in background
+                    // backgroundLoading is set to true to prevent UI lag
+                    // This handles the "file:/C:/..." format correctly
+                    Image image = new Image(imgPath, true);
+
+                    // Listener to handle if the file path is broken/missing
+                    image.errorProperty().addListener((obs, oldVal, newVal) -> {
+                        if (newVal) setDefaultImage();
+                    });
+
                     itemImage.setImage(image);
                 } catch (Exception e) {
-                    System.err.println("Failed to load image: " + imgPath);
                     setDefaultImage();
                 }
             } else {

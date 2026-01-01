@@ -201,7 +201,7 @@ public class HelloController {
                 return;
             }
 
-            if (databaseManager.add_item(name, Double.parseDouble(priceStr), cat, "No description", "", sPhone, sName)) {
+            if (databaseManager.add_item(name, Double.parseDouble(priceStr), cat, "No description", selectedImagePath, sPhone, sName)) {
                 switch_to_seller_dashboard(event);
             }
         } catch (Exception e) {

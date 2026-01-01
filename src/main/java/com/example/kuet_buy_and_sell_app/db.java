@@ -176,15 +176,16 @@ public class db {
 
     // --- ITEM METHODS ---
     public boolean add_item(String name, double price, String category, String description, String imagePath, String sPhone, String sName) {
-        String query = "INSERT INTO items (item_name, price, category, description, image_path, seller_phone, seller_name, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Available')";
+        String query = "INSERT INTO items (item_name, price, category, description, image_path, status, seller_phone, seller_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, name);
             ps.setDouble(2, price);
             ps.setString(3, category);
             ps.setString(4, description);
             ps.setString(5, imagePath);
-            ps.setString(6, sPhone);
-            ps.setString(7, sName);
+            ps.setString(6, "Available");
+            ps.setString(7, sPhone);
+            ps.setString(8, sName);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
