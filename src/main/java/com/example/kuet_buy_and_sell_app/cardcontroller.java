@@ -43,19 +43,19 @@ public class cardcontroller {
         }
 
         // Image Loading Logic
-        try {
+        if (itemImage != null) {
             if (imgPath != null && !imgPath.isEmpty()) {
-                InputStream is = getClass().getResourceAsStream(imgPath);
-                if (is != null) {
-                    itemImage.setImage(new Image(is));
-                } else {
+                try {
+                    // This will handle the file:/// URI path saved in the database
+                    Image image = new Image(imgPath, true); // true = load in background
+                    itemImage.setImage(image);
+                } catch (Exception e) {
+                    System.err.println("Failed to load image: " + imgPath);
                     setDefaultImage();
                 }
             } else {
                 setDefaultImage();
             }
-        } catch (Exception e) {
-            setDefaultImage();
         }
 
         if (btnAccept != null) { btnAccept.setVisible(false); btnAccept.setManaged(false); }

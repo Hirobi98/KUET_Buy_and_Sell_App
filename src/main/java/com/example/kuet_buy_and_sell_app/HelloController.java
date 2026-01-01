@@ -9,7 +9,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,6 +43,10 @@ public class HelloController {
     @FXML protected VBox itemPostContainer;
     @FXML protected Label lblSellerPostCount;
 
+    @FXML private Label lblImagePath;
+
+    private String selectedImagePath = "";
+
 
     @FXML
     public void initialize() {
@@ -49,6 +56,22 @@ public class HelloController {
                 loadMarketplace();
             }
         });
+    }
+
+    @FXML
+    public void handleSelectImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Product Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+
+        if (selectedFile != null) {
+            // Convert to URI so JavaFX Image class can load it easily from disk
+            selectedImagePath = selectedFile.toURI().toString();
+            lblImagePath.setText(selectedFile.getName());
+        }
     }
 
     public void loadMarketplace() {
