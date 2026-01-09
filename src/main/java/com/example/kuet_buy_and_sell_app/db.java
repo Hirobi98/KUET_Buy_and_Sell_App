@@ -58,11 +58,21 @@ public class db {
                 + "seller_phone TEXT, "
                 + "seller_name TEXT, "
                 + "status TEXT DEFAULT 'Available');";
+        // ADD THIS LINE inside create_table() in db.java
+        String reviewsTable = "CREATE TABLE IF NOT EXISTS reviews (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "item_id INTEGER, " +
+                "buyer_roll TEXT, " +
+                "rating INTEGER, " +
+                "comment TEXT, " +
+                "FOREIGN KEY(item_id) REFERENCES items(id));";
+
 
         try (Statement st = connection.createStatement()) {
             st.execute(buyerSql);
             st.execute(sellerSql);
             st.execute(itemSql);
+            st.execute(reviewsTable);
 
             // Column check logic
             try {
@@ -272,6 +282,29 @@ public class db {
             return pstmt.executeQuery();
         } catch (SQLException e) {
             logger.severe("Error fetching filtered items: " + e.getMessage());
+            return null;
+        }
+    }
+    public boolean addReview(int itemId, String buyerRoll, int rating, String comment) {
+        String sql = "INSERT INTO reviews (item_id, buyer_roll, rating, comment) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, itemId);
+            pstmt.setString(2, buyerRoll);
+            pstmt.setInt(3, rating);
+            pstmt.setString(4, comment);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public ResultSet getBuyerPurchases(String buyerRoll) {
+        String sql = "SELECT * FROM items WHERE buyer_roll = ? AND (status = 'Accepted' OR status = 'Sold')";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, buyerRoll);
+            return pstmt.executeQuery();
+        } catch (SQLException e) {
             return null;
         }
     }

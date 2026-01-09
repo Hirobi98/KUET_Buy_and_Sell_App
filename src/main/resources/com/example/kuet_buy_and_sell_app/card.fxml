@@ -22,6 +22,7 @@
 
                         <HBox alignment="CENTER_RIGHT" spacing="12.0">
                             <children>
+
                                 <Button fx:id="btnAccept" onAction="#handleAccept" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" text="Accept Request" visible="false" managed="false" />
                                 <Button fx:id="btnDecline" onAction="#handleDecline" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Decline" visible="false" managed="false" />
 
@@ -29,6 +30,9 @@
                                 <Button fx:id="btnDelete" onAction="#handleDelete" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" visible="false" managed="false" />
 
                                 <Button fx:id="btnAction" onAction="#handleBuyNow" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #00E676; -fx-text-fill: white; -fx-font-weight: bold;" text="Buy Now" />
+                                <Button fx:id="btnReview" onAction="#handleLeaveReview"
+                                        style="-fx-background-color: #9b59b6; -fx-text-fill: white;"
+                                        text="Give Review" visible="false" managed="false" />
                             </children>
                         </HBox>
                     </children>

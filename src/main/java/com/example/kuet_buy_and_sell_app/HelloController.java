@@ -308,4 +308,19 @@ public class HelloController {
         // Simply reloads the full marketplace view
         loadMarketplace();
     }
+    @FXML
+    public void showMyOrders(ActionEvent event) {
+        if (itemPostContainer == null) return;
+        itemPostContainer.getChildren().clear();
+
+        String currentBuyerRoll = user.getRoll();
+
+        try (ResultSet rs = databaseManager.getBuyerPurchases(currentBuyerRoll)) {
+            while (rs != null && rs.next()) {
+                loadCardIntoContainer(rs, false); // This will now show the Give Review button!
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

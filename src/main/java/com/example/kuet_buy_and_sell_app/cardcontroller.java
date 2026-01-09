@@ -3,6 +3,7 @@ package com.example.kuet_buy_and_sell_app;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ public class cardcontroller {
     @FXML private Button btnDelete, btnMarkSold, btnAction;
     @FXML private Button btnAccept, btnDecline;
     @FXML private Label ownerNameLabel;
+    @FXML private Button btnReview;
 
     private int itemId;
     private HelloController parentController;
@@ -90,10 +92,21 @@ public class cardcontroller {
                 btnAction.setVisible("Available".equalsIgnoreCase(status));
             }
 
-            // Special message for Buyer if seller accepted
-            if ("Accepted".equalsIgnoreCase(status) && statusLabel != null) {
-                statusLabel.setText("ACCEPTED! Meet at KUET Cafeteria");
+            if (btnReview != null) {
+                boolean canReview = "Accepted".equalsIgnoreCase(status) || "Sold".equalsIgnoreCase(status);
+                btnReview.setVisible(canReview);
+                btnReview.setManaged(canReview);
             }
+
+            // MODIFIED THIS SECTION:
+            if ("Accepted".equalsIgnoreCase(status) && statusLabel != null) {
+                // Updated text to serve as a notification in the "My Notifications" view
+                statusLabel.setText("ACCEPTED! Meet at KUET Cafeteria & Leave a Review");
+                statusLabel.setStyle("-fx-text-fill: #9b59b6; -fx-font-weight: bold;");
+            }
+
+            // Special message for Buyer if seller accepted
+
         }
     }
 
@@ -149,6 +162,30 @@ public class cardcontroller {
         } else {
             parentController.loadMarketplace();
         }
+    }
+    // ADD/MODIFY in cardcontroller.java
+    @FXML
+    private void handleLeaveReview() {
+        // 1. Get Rating
+        TextInputDialog ratingDialog = new TextInputDialog("5");
+        ratingDialog.setTitle("Rate Product");
+        ratingDialog.setHeaderText("Rate from 1 to 5");
+        ratingDialog.setContentText("Enter rating:");
+
+        ratingDialog.showAndWait().ifPresent(rating -> {
+            // 2. Get Comment
+            TextInputDialog commentDialog = new TextInputDialog("");
+            commentDialog.setTitle("Review");
+            commentDialog.setHeaderText("Write a short review");
+            commentDialog.setContentText("Comment:");
+
+            commentDialog.showAndWait().ifPresent(comment -> {
+                boolean success = db.b().addReview(itemId, user.getRoll(), Integer.parseInt(rating), comment);
+                if(success) {
+                    System.out.println("Review added successfully!");
+                }
+            });
+        });
     }
 
 
