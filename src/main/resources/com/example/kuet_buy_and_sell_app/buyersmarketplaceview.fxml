@@ -142,11 +142,11 @@
                 </VBox.margin>
             </Label>
             <VBox spacing="5.0">
-                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="All Items" />
-                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Electronics" />
-                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Furniture" />
-                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Books-Notes" />
-                <Button maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Clothing" />
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleShowAll" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="All Items" />
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleFilterCategory" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Electronics" />
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleFilterCategory" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Furniture" />
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleFilterCategory" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Books-Notes" />
+                <Button maxWidth="1.7976931348623157E308" onAction="#handleFilterCategory" style="-fx-background-color: transparent; -fx-text-fill: #0D47A1; -fx-padding: 8;" text="Clothing" />
             </VBox>
         </VBox>
     </left>

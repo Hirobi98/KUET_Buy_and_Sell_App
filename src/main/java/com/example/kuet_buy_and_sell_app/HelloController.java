@@ -284,4 +284,28 @@ public class HelloController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
+    @FXML
+    public void handleFilterCategory(ActionEvent event) {
+        // Get the category name from the button text (Electronics, Books, etc.)
+        Button btn = (Button) event.getSource();
+        String category = btn.getText();
+
+        if (itemPostContainer == null) return;
+        itemPostContainer.getChildren().clear();
+
+        // Fetch and load only items from this category
+        try (ResultSet rs = databaseManager.getItemsByCategory(category)) {
+            while (rs != null && rs.next()) {
+                loadCardIntoContainer(rs, false);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    public void handleShowAll(ActionEvent event) {
+        // Simply reloads the full marketplace view
+        loadMarketplace();
+    }
 }

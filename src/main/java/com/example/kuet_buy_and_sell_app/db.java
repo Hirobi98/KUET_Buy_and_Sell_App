@@ -264,4 +264,15 @@ public class db {
         }
         return connection;
     }
+    public ResultSet getItemsByCategory(String category) {
+        String sql = "SELECT * FROM items WHERE status = 'Available' AND category = ?";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, category);
+            return pstmt.executeQuery();
+        } catch (SQLException e) {
+            logger.severe("Error fetching filtered items: " + e.getMessage());
+            return null;
+        }
+    }
 }
