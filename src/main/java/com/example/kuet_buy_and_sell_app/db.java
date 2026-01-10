@@ -63,8 +63,9 @@ public class db {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "item_id INTEGER, " +
                 "buyer_roll TEXT, " +
+                "seller_phone TEXT, " +
                 "rating INTEGER, " +
-                "comment TEXT, " +
+                "review_text TEXT, " +
                 "FOREIGN KEY(item_id) REFERENCES items(id));";
 
 
@@ -286,12 +287,27 @@ public class db {
         }
     }
     public boolean addReview(int itemId, String buyerRoll, int rating, String comment) {
-        String sql = "INSERT INTO reviews (item_id, buyer_roll, rating, comment) VALUES (?, ?, ?, ?)";
+        String getSellerSql = "SELECT seller_phone FROM items WHERE id = ?";
+        String sellerPhone = "";
+
+        try (PreparedStatement ps = connection.prepareStatement(getSellerSql)) {
+            ps.setInt(1, itemId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) sellerPhone = rs.getString("seller_phone");
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        // Use review_text here to match your fetch query
+        String sql = "INSERT INTO reviews (item_id, seller_phone, buyer_roll, rating, review_text) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, itemId);
-            pstmt.setString(2, buyerRoll);
-            pstmt.setInt(3, rating);
-            pstmt.setString(4, comment);
+            pstmt.setString(2, sellerPhone);
+            pstmt.setString(3, buyerRoll);
+            pstmt.setInt(4, rating);
+            pstmt.setString(5, comment);
+
+            // This ensures the button disappears for the buyer
+            updateItemStatus(itemId, "Reviewed");
+
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -303,6 +319,17 @@ public class db {
         try {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, buyerRoll);
+            return pstmt.executeQuery();
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+    public ResultSet getSellerReviews(String phone) {
+
+        String sql = "SELECT buyer_roll, review_text, rating FROM reviews WHERE seller_phone = ?";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, phone);
             return pstmt.executeQuery();
         } catch (SQLException e) {
             return null;

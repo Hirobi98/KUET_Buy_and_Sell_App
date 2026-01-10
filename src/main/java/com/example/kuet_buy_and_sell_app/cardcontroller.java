@@ -93,20 +93,17 @@ public class cardcontroller {
             }
 
             if (btnReview != null) {
-                boolean canReview = "Accepted".equalsIgnoreCase(status) || "Sold".equalsIgnoreCase(status);
+
+                boolean canReview = "Accepted".equalsIgnoreCase(status) && !isOwner;
                 btnReview.setVisible(canReview);
                 btnReview.setManaged(canReview);
             }
 
-            // MODIFIED THIS SECTION:
-            if ("Accepted".equalsIgnoreCase(status) && statusLabel != null) {
-                // Updated text to serve as a notification in the "My Notifications" view
-                statusLabel.setText("ACCEPTED! Meet at KUET Cafeteria & Leave a Review");
-                statusLabel.setStyle("-fx-text-fill: #9b59b6; -fx-font-weight: bold;");
+
+            if ("Reviewed".equalsIgnoreCase(status)) {
+                statusLabel.setText("Status: Completed & Reviewed");
+                statusLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold;");
             }
-
-            // Special message for Buyer if seller accepted
-
         }
     }
 
@@ -183,6 +180,7 @@ public class cardcontroller {
                 boolean success = db.b().addReview(itemId, user.getRoll(), Integer.parseInt(rating), comment);
                 if(success) {
                     System.out.println("Review added successfully!");
+                    refreshUI();
                 }
             });
         });

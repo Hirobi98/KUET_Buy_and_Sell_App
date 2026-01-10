@@ -323,4 +323,31 @@ public class HelloController {
             e.printStackTrace();
         }
     }
+    // Add this inside HelloController.java
+
+    public void handleLeaveReview(int itemId) {
+        // 1. Create a Dialog to get Review data
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Leave a Review");
+        dialog.setHeaderText("Rate your experience (1-5 stars)");
+        dialog.setContentText("Enter your comment:");
+
+        dialog.showAndWait().ifPresent(comment -> {
+            // For simplicity, we'll assume a 5-star rating or ask for it
+            int rating = 5;
+            String buyerRoll = user.getRoll();
+
+            // 2. Save to Database
+            if (databaseManager.addReview(itemId, buyerRoll, rating, comment)) {
+                // 3. Update the item status so it's no longer "Accepted"
+                // This is what makes the button disappear!
+                databaseManager.updateItemStatus(itemId, "Reviewed");
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Review submitted!");
+
+                // 4. Refresh the view to hide the button
+                showMyOrders(null);
+            }
+        });
+    }
 }

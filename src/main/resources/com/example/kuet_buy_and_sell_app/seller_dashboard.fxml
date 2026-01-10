@@ -36,7 +36,17 @@
 
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-            <VBox fx:id="itemPostContainer" alignment="TOP_CENTER" spacing="20.0" style="-fx-padding: 30;">
+            <VBox alignment="TOP_CENTER" spacing="30.0" style="-fx-padding: 30;">
+
+                <VBox spacing="10.0" alignment="TOP_CENTER">
+                    <Label text="Your Active Listings" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1e3c72;" />
+                    <VBox fx:id="itemPostContainer" spacing="20.0" alignment="TOP_CENTER" />
+                </VBox>
+
+                <VBox spacing="10.0" alignment="TOP_CENTER">
+                    <Label text="Customer Reviews" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #9b59b6;" />
+                    <VBox fx:id="reviewContainer" spacing="15.0" alignment="TOP_CENTER" maxWidth="850.0" />
+                </VBox>
 
             </VBox>
         </ScrollPane>
