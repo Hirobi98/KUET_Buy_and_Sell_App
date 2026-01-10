@@ -13,8 +13,13 @@
                     <children>
                         <Label fx:id="itemNameLabel" style="-fx-font-weight: bold; -fx-font-size: 22;" text="Item Name" />
 
-                        <Label fx:id="ownerNameLabel" style="-fx-text-fill: #757575;" text="Seller: Unknown" />
-
+                        <VBox spacing="2">
+                            <Label fx:id="ownerNameLabel" style="-fx-text-fill: #757575;" text="Seller: Unknown" />
+                            <Label fx:id="sellerPhoneLabel" style="-fx-text-fill: #2ecc71; -fx-font-weight: bold;" text="Phone: Not Available" />
+                        </VBox>
+                        <Label fx:id="buyerInfoLabel" managed="false" visible="false"
+                               style="-fx-background-color: #fff3cd; -fx-text-fill: #856404; -fx-padding: 8; -fx-background-radius: 5; -fx-font-weight: bold;"
+                               text="Buyer Details" />
                         <Label fx:id="categoryLabel" text="Category" />
                         <Label fx:id="priceLabel" style="-fx-font-weight: bold;" text="৳ 0.0" />
                         <Label fx:id="statusLabel" text="Available" />

@@ -106,10 +106,13 @@ public class HelloController {
             // NEW: Passing status and owner name to the card
             String status = rs.getString("status");
             String ownerName = rs.getString("seller_name");
+            String ownerPhone = rs.getString("seller_phone"); // This allows buyers to see contact info
+            String buyerRoll = rs.getString("buyer_roll");
+            if (buyerRoll == null) buyerRoll = "None";
 
             // UPDATED: Now passing all 10 parameters required by cardcontroller
-            controller.setData(id, name, cat, price, desc, img, status, isOwnerView, ownerName, this);
-
+            controller.setData(id, name, cat, price, desc, img, status, isOwnerView,
+                    ownerName, ownerPhone, buyerRoll, this);
             itemPostContainer.getChildren().add(cardBox);
         } catch (IOException e) {
             e.printStackTrace();

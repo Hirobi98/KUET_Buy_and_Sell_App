@@ -205,8 +205,8 @@ public class db {
 
 
     public ResultSet getAvailableItems() {
-        // FIX: Explicitly include 'seller_name' in the query
-        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone, seller_name FROM items WHERE status = 'Available'";
+
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone, seller_name, buyer_roll FROM items WHERE status = 'Available'";
         try {
             Statement stmt = connection.createStatement();
             return stmt.executeQuery(sql);
@@ -217,8 +217,8 @@ public class db {
     }
 
     public ResultSet getSellerItems(String phone) {
-        // FIX: Explicitly include 'seller_name' in the query
-        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone, seller_name FROM items WHERE seller_phone = ?";
+
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_phone, seller_name, buyer_roll FROM items WHERE seller_phone = ?";
         try {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, phone);
@@ -315,7 +315,7 @@ public class db {
         }
     }
     public ResultSet getBuyerPurchases(String buyerRoll) {
-        String sql = "SELECT * FROM items WHERE buyer_roll = ? AND (status = 'Accepted' OR status = 'Sold')";
+        String sql = "SELECT id, item_name, price, category, description, image_path, status, seller_name, seller_phone, buyer_roll FROM items WHERE buyer_roll = ? AND (status = 'Accepted' OR status = 'Sold' OR status = 'Reviewed')";
         try {
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, buyerRoll);

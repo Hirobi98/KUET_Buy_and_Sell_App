@@ -15,6 +15,8 @@ public class cardcontroller {
     @FXML private Button btnAccept, btnDecline;
     @FXML private Label ownerNameLabel;
     @FXML private Button btnReview;
+    @FXML private Label sellerPhoneLabel;
+    @FXML private Label buyerInfoLabel;
 
     private int itemId;
     private HelloController parentController;
@@ -24,7 +26,7 @@ public class cardcontroller {
      */
 
 
-    public void setData(int id, String name, String cat, double price, String desc, String imgPath, String status, boolean isOwner, String ownerName, HelloController parent) {
+    public void setData(int id, String name, String cat, double price, String desc, String imgPath, String status, boolean isOwner, String ownerName,String ownerPhone, String buyerRoll,HelloController parent) {
         this.itemId = id;
         this.parentController = parent;
 
@@ -36,6 +38,9 @@ public class cardcontroller {
         // NEW: Display the owner's name
         if (ownerNameLabel != null) {
             ownerNameLabel.setText("Seller: " + (ownerName != null ? ownerName : "Unknown"));
+        }
+        if (sellerPhoneLabel != null) {
+            sellerPhoneLabel.setText("Phone: " + (ownerPhone != null ? ownerPhone : "Not Provided"));
         }
 
         if (statusLabel != null) {
@@ -68,16 +73,24 @@ public class cardcontroller {
 
         if (btnAccept != null) { btnAccept.setVisible(false); btnAccept.setManaged(false); }
         if (btnDecline != null) { btnDecline.setVisible(false); btnDecline.setManaged(false); }
+        if (buyerInfoLabel != null) { buyerInfoLabel.setVisible(false); buyerInfoLabel.setManaged(false); }
 
         if (isOwner) {
             // Seller Controls
             if (btnDelete != null) btnDelete.setVisible(true);
             if (btnAction != null) btnAction.setVisible(false); // Seller can't buy own item
 
+
             if ("Pending".equalsIgnoreCase(status)) {
                 // Someone wants to buy! Show Accept/Decline
                 if (btnAccept != null) { btnAccept.setVisible(true); btnAccept.setManaged(true); }
                 if (btnDecline != null) { btnDecline.setVisible(true); btnDecline.setManaged(true); }
+
+                if (buyerInfoLabel != null) {
+                    buyerInfoLabel.setVisible(true);
+                    buyerInfoLabel.setManaged(true);
+                    buyerInfoLabel.setText("Request from Buyer Roll: " + (buyerRoll != null ? buyerRoll : "Unknown"));
+                }
                 if (btnMarkSold != null) btnMarkSold.setVisible(false);
             } else {
                 if (btnMarkSold != null) btnMarkSold.setVisible(!"Sold".equalsIgnoreCase(status));
