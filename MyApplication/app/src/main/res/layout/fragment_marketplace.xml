@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    
+    <!-- Top Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink_dark"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="KUET HUB Marketplace"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnPostItem"/>
+            
+        <Button
+            android:id="@+id/btnPostItem"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="+ Post New Item"
+            android:textSize="10sp"
+            android:backgroundTint="@color/orange_action"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:cornerRadius="18dp"
+            app:layout_constraintEnd_toStartOf="@id/btnLogout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+            
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="Logout"
+            android:textSize="10sp"
+            android:backgroundTint="@color/red_logout"
+            app:cornerRadius="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <!-- Filter Bar (Simulating Sidebar items) -->
+    <HorizontalScrollView
+        android:id="@+id/scrollFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pink_dark"
+        android:paddingBottom="8dp"
+        android:scrollbars="none"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout">
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+            
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Items"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipElectronics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electronics"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFurniture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Furniture"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBooks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Books-Notes"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+                
+             <com.google.android.material.chip.Chip
+                android:id="@+id/chipClothing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clothing"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+            
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Notifications"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/blue_primary"
+                style="@style/Widget.MaterialComponents.Chip.Action"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewProducts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/scrollFilters"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_product_card" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
