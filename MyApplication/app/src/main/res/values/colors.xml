@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="pink_primary">#FBD0C7</color>
+    <color name="pink_dark">#F6C7C4</color>
+    <color name="pink_accent">#E88FA2</color>
+    <color name="blue_primary">#1e3c72</color>
+    <color name="blue_dark">#2A5298</color>
+    <color name="seller_cyan">#00B4D8</color>
+    <color name="seller_bg">#29B6F6</color>
+    <color name="green_action">#00C853</color>
+    <color name="red_logout">#FF1744</color>
+    <color name="gradient_start">#f44336</color>
+    <color name="gradient_end">#da6dbc</color>
+    <color name="marketplace_bg">#E3F2FD</color>
+    <color name="transparent">#00000000</color>
+    
+    <color name="orange_action">#FF9800</color>
+    <color name="blue_dialog_bg">#1565C0</color>
+</resources>

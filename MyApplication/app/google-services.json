@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "405691617744",
+    "project_id": "kuetify-10c87",
+    "storage_bucket": "kuetify-10c87.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405691617744:android:f5cced9a2c1a93bf1629d5",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZv_HmbvGHC8kwt26fBjFr0rZwEfvV5NU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
